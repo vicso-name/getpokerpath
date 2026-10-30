@@ -1,6 +1,17 @@
 # Development progress
 
-Status: **Stage 3 complete, awaiting review.** P01, P05 and P09 are published in the site build, so all Wave 1 tools exist. Stages 0 and 1 are on `origin/main`; Stages 2 and 3 are uncommitted in the working tree. Nothing has been deployed.
+Status: **Wave 1 tools are functionally complete.** P01, P05 and P09 are published in the site build and all stages below are on `origin/main`. Nothing has been deployed. Functionally complete doesn't mean ready to launch: see Unresolved.
+
+| Stage | Status |
+| --- | --- |
+| Stage 0 — Foundation | Complete |
+| Stage 1 — Poker Hand Rankings Explorer (P01) | Complete |
+| Stage 2 — Poker Positions Trainer (P05) | Complete |
+| Stage 3 — Pot Odds Calculator (P09) | Complete |
+| Stage 3.5 — UI/UX Design Sprint | Next, not started |
+| Stage 4 — Launch readiness | Not started |
+
+Context for the next session is in `docs/NEXT_SESSION.md`.
 
 ## Completed
 
@@ -162,4 +173,4 @@ Screenshots of all three tools reviewed by eye at 1280, 375 and 320px.
 
 ## Next
 
-After review and approval, commit Stages 2 and 3, then start Stage 4 on approval: launch readiness.
+Stage 3.5 — UI/UX Design Sprint, on approval: UI/UX audit, Design System V2 and a redesign prototype of the Pot Odds Calculator. It changes how the tools look, not what they do. Stage 4, launch readiness, follows it. The plan is in `docs/NEXT_SESSION.md`.
