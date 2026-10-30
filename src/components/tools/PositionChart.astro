@@ -1,0 +1,75 @@
+---
+import {
+  POSITIONS,
+  POSITION_GROUP_NAMES,
+  TABLE_FORMATS,
+  actingOrder,
+  actingTurn,
+  type TableFormat,
+} from '../../lib/poker/positions';
+
+interface Props {
+  format: TableFormat;
+}
+
+const { format } = Astro.props;
+const { name } = TABLE_FORMATS[format];
+---
+
+<div class="chart" role="region" aria-label={`${name} positions`} tabindex="0">
+  <table>
+    <caption>{name} positions in preflop order</caption>
+    <thead>
+      <tr>
+        <th scope="col">Seat</th>
+        <th scope="col">Name</th>
+        <th scope="col">Group</th>
+        <th scope="col">Preflop turn</th>
+        <th scope="col">Postflop turn</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        actingOrder(format, 'preflop').map((id) => (
+          <tr>
+            <th scope="row">{POSITIONS[id].label}</th>
+            <td>{POSITIONS[id].name}</td>
+            <td>{POSITION_GROUP_NAMES[POSITIONS[id].group]}</td>
+            <td>{actingTurn(format, 'preflop', id)}</td>
+            <td>{actingTurn(format, 'postflop', id)}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .chart {
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-raised);
+  }
+
+  table {
+    width: 100%;
+    min-width: 30rem;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+  }
+
+  caption {
+    padding: var(--space-3);
+    font-weight: 600;
+    text-align: left;
+  }
+
+  th,
+  td {
+    padding: var(--space-2) var(--space-3);
+    border-top: 1px solid var(--color-border);
+    text-align: left;
+  }
+</style>

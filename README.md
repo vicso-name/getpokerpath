@@ -39,7 +39,7 @@ Copy `.env.example` to `.env` to override defaults. The only setting is `SITE_UR
 src/
   pages/            Routes. Only live pages belong here.
   layouts/          BaseLayout (site shell) and ToolLayout (tool page shell)
-  components/       layout/, seo/, poker/, tools/
+  components/       layout/, seo/, poker/, tools/, ui/
   lib/poker/        Poker rules and math. Pure TypeScript with no UI dependencies.
   lib/seo/          Metadata and structured-data builders
   lib/site/         Site constants and the tool registry

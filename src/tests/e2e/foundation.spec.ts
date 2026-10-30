@@ -9,6 +9,8 @@ const pages = [
   { path: '/', indexable: true },
   { path: '/tools/', indexable: LIVE_TOOL_IDS.length > 0 },
   { path: '/poker-hand-rankings/', indexable: true },
+  { path: '/poker-positions/', indexable: true },
+  { path: '/poker-pot-odds-calculator/', indexable: true },
 ];
 
 async function internalLinks(page: Page): Promise<string[]> {

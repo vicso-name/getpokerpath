@@ -1,0 +1,149 @@
+.table {
+  position: relative;
+  width: 100%;
+  max-width: 40rem;
+  margin-inline: auto;
+  aspect-ratio: 3 / 4;
+}
+
+.felt {
+  position: absolute;
+  inset: 13%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  border: 6px solid var(--color-brand-strong);
+  border-radius: 50%;
+  background: var(--color-brand);
+  color: var(--color-on-brand-muted);
+  font-size: var(--text-sm);
+  line-height: 1.3;
+  text-align: center;
+}
+
+.felt span {
+  max-width: 7rem;
+}
+
+.dealerChip {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 2px solid var(--color-suit-black);
+  border-radius: 50%;
+  background: var(--color-surface-raised);
+  color: var(--color-suit-black);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  transform: translate(-50%, -50%);
+  transition:
+    left 0.3s ease,
+    top 0.3s ease;
+}
+
+.seats {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seatSlot {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+}
+
+.seat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border: 2px solid var(--color-border-strong);
+  border-radius: 50%;
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  line-height: 1.15;
+}
+
+button.seat {
+  cursor: pointer;
+}
+
+button.seat:hover {
+  border-color: var(--color-brand);
+  background: var(--color-surface-sunken);
+}
+
+.seatNumber {
+  color: var(--color-text-muted);
+  font-size: 0.6875rem;
+}
+
+.seatLabel {
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.dealerSeat {
+  border-color: var(--color-suit-black);
+}
+
+.selected,
+button.selected:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent);
+}
+
+.correct,
+button.correct:hover {
+  border-color: var(--color-success);
+  box-shadow: 0 0 0 2px var(--color-success);
+}
+
+.wrong,
+button.wrong:hover {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 2px var(--color-error);
+}
+
+/* Shape as well as color: a tick or a cross on the seat's corner. */
+.correct::after,
+.wrong::after {
+  position: absolute;
+  top: -0.35rem;
+  right: -0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  color: var(--color-on-brand);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.correct::after {
+  content: '\2713';
+  background: var(--color-success);
+}
+
+.wrong::after {
+  content: '\2715';
+  background: var(--color-error);
+}
+
+@media (min-width: 40rem) {
+  .table {
+    aspect-ratio: 16 / 10;
+  }
+}

@@ -1,0 +1,121 @@
+.title {
+  font-size: var(--text-xl);
+}
+
+.controls {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.prompt {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border-left: 4px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.prompt h3 {
+  font-size: var(--text-xl);
+}
+
+.prompt h3:focus {
+  outline: none;
+}
+
+.prompt p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.linkButton {
+  min-height: 1.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-brand);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.workspace {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.panel {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.hint {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.feedback {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-left: 4px solid var(--color-success);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.feedback[data-correct='false'] {
+  border-left-color: var(--color-error);
+}
+
+.verdict {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.seatTag {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.seatTitle {
+  margin-block: var(--space-1) var(--space-2);
+}
+
+.facts {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+}
+
+.facts dt {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.facts dd {
+  margin: 0;
+}
+
+@media (min-width: 40rem) {
+  .controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+}
+
+@media (min-width: 60rem) {
+  .workspace {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+    gap: var(--space-6);
+  }
+}

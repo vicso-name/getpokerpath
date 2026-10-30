@@ -1,0 +1,51 @@
+.control {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.option {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.option input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.option span {
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  height: 100%;
+  min-height: var(--tap-target);
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.option small {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.3;
+}
+
+.option input:checked + span {
+  border-color: var(--color-brand);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-brand);
+}
+
+.option input:focus-visible + span {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}

@@ -1,0 +1,223 @@
+---
+import { ActingOrder } from '../../components/poker/ActingOrder';
+import { PokerTable } from '../../components/poker/PokerTable';
+import type { FaqItem } from '../../components/tools/Faq.astro';
+import PositionChart from '../../components/tools/PositionChart.astro';
+import { PositionsTrainer } from '../../components/tools/PositionsTrainer';
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import {
+  POSITIONS,
+  POSITION_GROUP_NAMES,
+  TABLE_FORMATS,
+  actingOrder,
+  type PositionGroup,
+} from '../../lib/poker/positions';
+import { getTool } from '../../lib/site/tools';
+
+const tool = getTool('P05');
+const labels = (ids: readonly (keyof typeof POSITIONS)[]) =>
+  ids.map((id) => POSITIONS[id].label).join(', ');
+
+const nineMaxOrder = TABLE_FORMATS['9-max'].clockwiseFromButton;
+const groups: readonly { group: PositionGroup; text: string }[] = [
+  {
+    group: 'early',
+    text: 'The first seats to act before the flop. Most of the table still has a decision to make behind you, so you know the least about what others will do.',
+  },
+  {
+    group: 'middle',
+    text: 'Some players have already acted and some are still to come. You have more information than the early seats, but not as much as the late ones.',
+  },
+  {
+    group: 'late',
+    text: 'Few or no players act after you from the flop onward. You see what most of the table did before you decide.',
+  },
+  {
+    group: 'blinds',
+    text: 'The two forced bets. They act last before the flop, because they have already put chips in, and then first on every later betting round.',
+  },
+];
+const seatsInGroup = (group: PositionGroup) =>
+  labels(nineMaxOrder.filter((id) => POSITIONS[id].group === group));
+
+const faqs: readonly FaqItem[] = [
+  {
+    question: 'What are all the position names in poker?',
+    answer: `On a 9-max table, clockwise from the button: ${nineMaxOrder.map((id) => `${POSITIONS[id].name} (${POSITIONS[id].label})`).join(', ')}. A 6-max table keeps the Button, the blinds, Under the Gun, the Hijack and the Cutoff.`,
+  },
+  {
+    question: 'Which position is the best in poker?',
+    answer:
+      'The Button. It acts last on every betting round after the flop, so that player sees what everyone else did before deciding.',
+  },
+  {
+    question: 'What does under the gun mean in poker?',
+    answer:
+      'Under the Gun, or UTG, is the seat directly left of the big blind. It is the first to act before the flop, with the whole table still to act behind it.',
+  },
+  {
+    question: 'Who acts first in poker?',
+    answer:
+      'Before the flop, Under the Gun acts first and the Big Blind acts last. After the flop, the first player still in the hand to the left of the button acts first, and the Button acts last if still in.',
+  },
+  {
+    question: 'How does the dealer button move?',
+    answer:
+      'One seat clockwise after every hand, and the blinds move with it. Last hand’s Big Blind becomes the Small Blind, and last hand’s Small Blind becomes the Button.',
+  },
+  {
+    question: 'Are poker position names the same everywhere?',
+    answer:
+      'Not exactly. The Button, the blinds, UTG and the Cutoff are standard. Names for the seats in between vary by table size and by who you ask: the 6-max Hijack is often called MP, and the 9-max MP is also called UTG+2.',
+  },
+  {
+    question: 'How do positions work heads-up?',
+    answer:
+      'With two players, the Button posts the small blind and the other player posts the big blind. The Button acts first before the flop and last after it.',
+  },
+];
+---
+
+<ToolLayout
+  tool={tool}
+  title="Poker Positions: 6-Max & 9-Max Table Trainer"
+  description="Learn every poker position on a 6-max or 9-max table. Move the dealer button, see who acts first, then practice finding UTG, the Cutoff and the blinds."
+  heading="Poker Positions Explained"
+  intro="Your position is where you sit relative to the dealer button, and it decides when you act. Select any seat below to learn what it does, then switch to Practice to test yourself."
+  faqs={faqs}
+  relatedIds={['P01', 'P09']}
+>
+  <p class="jump"><a href="#position-names">Skip to the position names</a></p>
+  <PositionsTrainer client:load />
+
+  <Fragment slot="content">
+    <section class="stack" aria-labelledby="position-names">
+      <h2 id="position-names">Poker position names</h2>
+      <p>
+        Positions move with the dealer button, so nobody keeps the same one for long. The tables
+        below list each seat in the order it acts before the flop. The turn numbers assume every
+        player is still in the hand on that betting round.
+      </p>
+      <PositionChart format="6-max" />
+      <PositionChart format="9-max" />
+      <p>
+        We use one set of names across the site. Some players and charts use different names for the
+        seats between UTG and the Cutoff, especially on full tables.
+      </p>
+    </section>
+
+    <section class="stack" aria-labelledby="position-groups">
+      <h2 id="position-groups">Early, middle and late position</h2>
+      <p>
+        Players group seats by how soon they act. The seats named here are from a 9-max table. At
+        6-max there is one early seat (UTG), one middle seat (HJ) and the same two late seats.
+      </p>
+      <dl class="groups">
+        {
+          groups.map(({ group, text }) => (
+            <div>
+              <dt>
+                {POSITION_GROUP_NAMES[group]}: {seatsInGroup(group)}
+              </dt>
+              <dd>{text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section class="stack" aria-labelledby="why-position">
+      <h2 id="why-position">Why being in position is an advantage</h2>
+      <p>
+        You are “in position” when you act after your opponent, and “out of position” when you act
+        before them. Acting second matters for three reasons:
+      </p>
+      <ul>
+        <li>
+          <strong>You have more information.</strong> You see whether your opponent checked, bet or raised
+          before you commit any chips.
+        </li>
+        <li>
+          <strong>You control the size of the pot.</strong> When your opponent checks, you choose whether
+          to bet or to see the next card for free.
+        </li>
+        <li>
+          <strong>You get the last word.</strong> No one can raise behind you on that betting round if you
+          close the action.
+        </li>
+      </ul>
+      <p>
+        Position doesn’t change the strength of your cards. To check what your cards are worth, see
+        our <a href="/poker-hand-rankings/">poker hand rankings chart</a>.
+      </p>
+    </section>
+
+    <section class="stack" aria-labelledby="who-acts-first">
+      <h2 id="who-acts-first">Who acts first before and after the flop</h2>
+      <p>
+        The order changes between betting rounds, and this is the part that trips up most new
+        players. Before the flop, action starts with the player to the left of the big blind,
+        because the blinds have already paid. From the flop onward, it starts with the first player
+        to the left of the button who is still in the hand.
+      </p>
+      <p>The examples below show the full order for each table, assuming everyone stays in the hand.</p>
+    </section>
+
+    <section class="stack" aria-labelledby="table-examples">
+      <h2 id="table-examples">6-max and 9-max table examples</h2>
+      <figure class="example">
+        <PokerTable format="6-max" button={0} />
+        <figcaption>
+          <strong>6-max:</strong> {labels(TABLE_FORMATS['6-max'].clockwiseFromButton)}, clockwise from
+          the button.
+        </figcaption>
+        <ActingOrder format="6-max" />
+      </figure>
+      <figure class="example">
+        <PokerTable format="9-max" button={0} />
+        <figcaption>
+          <strong>9-max:</strong> {labels(nineMaxOrder)}, clockwise from the button. The three extra
+          seats sit between UTG and the Hijack.
+        </figcaption>
+        <ActingOrder format="9-max" />
+      </figure>
+      <p>
+        Heads-up play is the one exception to the usual order. With two players the Button posts the
+        small blind, so before the flop the order is {labels(actingOrder('heads-up', 'preflop'))} and
+        after it {labels(actingOrder('heads-up', 'postflop'))}.
+      </p>
+    </section>
+  </Fragment>
+</ToolLayout>
+
+<style>
+  .jump {
+    margin-bottom: var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  section + section {
+    margin-top: var(--space-6);
+  }
+
+  .groups {
+    display: grid;
+    gap: var(--space-3);
+    margin-bottom: 0;
+  }
+
+  .groups dt {
+    font-weight: 700;
+  }
+
+  .groups dd {
+    margin: 0;
+  }
+
+  .example {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    min-width: 0;
+  }
+</style>

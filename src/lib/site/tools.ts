@@ -17,7 +17,7 @@ export interface Tool {
  * single step that publishes a tool to the navigation, Home, /tools/ and related
  * links, so only add one in the same change that ships the working page.
  */
-export const LIVE_TOOL_IDS: readonly string[] = ['P01'];
+export const LIVE_TOOL_IDS: readonly string[] = ['P01', 'P05', 'P09'];
 
 const TOOL_COPY: Record<string, Pick<Tool, 'navLabel' | 'summary'>> = {
   P01: {

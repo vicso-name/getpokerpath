@@ -13,11 +13,12 @@ import {
 } from '../../lib/tools/handComparator';
 import { CardFace } from '../poker/CardFace';
 import { CardPicker } from '../poker/CardPicker';
+import { SegmentedControl, type SegmentOption } from '../ui/SegmentedControl';
 import styles from './HandComparator.module.css';
 
-const MODES: readonly { id: Mode; label: string; hint: string }[] = [
-  { id: 'holdem', label: 'Texas Hold’em', hint: '2 hole cards + 5 on the board' },
-  { id: 'five-card', label: 'Five-card hands', hint: '5 cards each' },
+const MODES: readonly SegmentOption<Mode>[] = [
+  { value: 'holdem', label: 'Texas Hold’em', hint: '2 hole cards + 5 on the board' },
+  { value: 'five-card', label: 'Five-card hands', hint: '5 cards each' },
 ];
 
 interface SlotProps {
@@ -123,27 +124,16 @@ export function HandComparator() {
   const selectSlot = (slot: number) => dispatch({ type: 'select-slot', slot });
 
   return (
-    <div className={styles.tool}>
+    <div className="tool-panel">
       <h2 className={styles.title}>Compare two poker hands</h2>
 
-      <fieldset className={styles.modes}>
-        <legend className="visually-hidden">Game format</legend>
-        {MODES.map((option) => (
-          <label key={option.id} className={styles.mode}>
-            <input
-              type="radio"
-              name="comparator-mode"
-              value={option.id}
-              checked={mode === option.id}
-              onChange={() => dispatch({ type: 'set-mode', mode: option.id })}
-            />
-            <span>
-              <strong>{option.label}</strong>
-              <small>{option.hint}</small>
-            </span>
-          </label>
-        ))}
-      </fieldset>
+      <SegmentedControl
+        legend="Game format"
+        name="comparator-mode"
+        options={MODES}
+        value={mode}
+        onChange={(value) => dispatch({ type: 'set-mode', mode: value })}
+      />
 
       <div className={styles.workspace}>
         <div className={styles.table}>

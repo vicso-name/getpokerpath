@@ -63,6 +63,15 @@ describe('tool registry', () => {
   });
 });
 
+describe('position model', () => {
+  it('is the only place position lists are defined', () => {
+    const uiFiles = [...filesIn('src/components'), ...filesIn('src/pages'), ...filesIn('src/lib/tools')];
+    for (const file of uiFiles.filter((path) => /\.(tsx?|astro)$/.test(path))) {
+      expect(readFileSync(file, 'utf8'), file).not.toMatch(/['"](UTG1?|HJ|LJ|CO|BTN|SB|BB)['"]\s*,\s*['"](UTG1?|HJ|LJ|CO|BTN|SB|BB)['"]/);
+    }
+  });
+});
+
 describe('poker domain layer', () => {
   it('imports nothing outside itself, keeping it free of UI frameworks', () => {
     const imports = filesIn('src/lib/poker').flatMap((file) =>

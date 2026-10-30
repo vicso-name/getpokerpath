@@ -1,0 +1,330 @@
+---
+import type { FaqItem } from '../../components/tools/Faq.astro';
+import { PotOddsCalculator } from '../../components/tools/PotOddsCalculator';
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import {
+  calculatePotOdds,
+  formatChips,
+  formatPercent,
+  formatRatio,
+  parseChips,
+  type PotOddsResult,
+  type ShortCallReason,
+} from '../../lib/poker/potOdds';
+import { getTool } from '../../lib/site/tools';
+import { explainResult } from '../../lib/tools/potOddsCalculator';
+
+const tool = getTool('P09');
+
+const chips = (amount: number) => {
+  const parsed = parseChips(String(amount));
+  if (!parsed.ok) throw new Error(`Invalid amount: ${amount}`);
+  return parsed.units;
+};
+
+/** Every number on this page comes from the calculator, so copy can't drift from the math. */
+function worked(pot: number, bet: number, call: number, shortCall?: ShortCallReason): PotOddsResult {
+  const outcome = calculatePotOdds({
+    pot: chips(pot),
+    bet: chips(bet),
+    call: chips(call),
+    shortCall,
+  });
+  if (outcome.status !== 'ok') throw new Error(`No result for ${pot}, ${bet}, ${call}`);
+  return outcome;
+}
+
+const halfPot = worked(100, 50, 50);
+const potSize = worked(100, 100, 100);
+const facingRaise = worked(120, 60, 40, 'chips-in');
+const multiway = worked(100, 100, 50, 'chips-in');
+const allIn = worked(100, 100, 40, 'all-in');
+
+const betSizes = [
+  { name: 'Quarter pot', bet: 25 },
+  { name: 'One-third pot', bet: 33.33 },
+  { name: 'Half pot', bet: 50 },
+  { name: 'Two-thirds pot', bet: 66.67 },
+  { name: 'Three-quarter pot', bet: 75 },
+  { name: 'Pot size', bet: 100 },
+  { name: 'Twice the pot', bet: 200 },
+].map(({ name, bet }) => ({ name, result: worked(100, bet, bet) }));
+
+const walkthroughs = [
+  {
+    title: 'A half-pot bet',
+    setup: 'The pot is 100 and your opponent bets 50. You have to call 50.',
+    result: halfPot,
+  },
+  {
+    title: 'A pot-size bet',
+    setup: 'The pot is 100 and your opponent bets 100. You have to call 100.',
+    result: potSize,
+  },
+  {
+    title: 'Facing a raise',
+    setup:
+      'The pot is 100. You bet 20, so the pot is now 120, and your opponent raises to 60. You still owe 40.',
+    result: facingRaise,
+  },
+];
+
+const outs = 9;
+const unseenCards = 46;
+const outsPercent = ((outs / unseenCards) * 100).toFixed(1);
+
+const faqs: readonly FaqItem[] = [
+  {
+    question: 'What are pot odds in poker?',
+    answer:
+      'Pot odds compare what a call costs with what is in the pot. They tell you how often the call has to win to break even.',
+  },
+  {
+    question: 'How do you calculate pot odds?',
+    answer: `Divide your call by the final pot, which is the pot plus the bet plus your call. With a pot of 100 and a bet of 50, that is ${explainResult(halfPot).equation}.`,
+  },
+  {
+    question: 'How do you turn a pot odds ratio into a percentage?',
+    answer: `Add the two sides of the ratio and divide the second side by the total. Pot odds of ${formatRatio(halfPot.ratio)} become 1 ÷ 4, which is ${formatPercent(halfPot.requiredEquity)}.`,
+  },
+  {
+    question: 'Do you include your call in the pot?',
+    answer:
+      'Yes for the percentage, because your call is part of the pot you are trying to win. No for the ratio, which compares the pot before your call with the cost of the call.',
+  },
+  {
+    question: 'What is the difference between pot odds and equity?',
+    answer:
+      'Pot odds are the price of the call and come from chip amounts. Equity is your share of the pot based on the cards, and has to be estimated. You compare the two.',
+  },
+  {
+    question: 'What is the difference between pot odds and implied odds?',
+    answer:
+      'Pot odds use only the chips in the pot right now. Implied odds also count chips you might win on later streets, which is an estimate rather than a fixed number.',
+  },
+  {
+    question: 'Does rake change pot odds?',
+    answer:
+      'Yes. Rake comes out of the pot, so you win slightly less and need slightly more equity than the calculator shows. It does not include rake.',
+  },
+  {
+    question: 'What happens if I am all-in for less than the bet?',
+    answer: `You can only win what you match, so your opponent takes back the rest. With a pot of 100, a bet of 100 and 40 left in your stack, you need ${formatPercent(allIn.requiredEquity)}, not the lower figure you would get by counting the whole bet.`,
+  },
+];
+---
+
+<ToolLayout
+  tool={tool}
+  title="How to Calculate Pot Odds: Free Calculator"
+  description="Enter the pot, the bet and your call to see the equity you need to break even, the final pot and the pot odds ratio, with every step of the math shown."
+  heading="Pot Odds Calculator"
+  intro="To calculate pot odds, divide your call by the final pot. Enter the amounts below to see how often a call has to win to break even, with the math shown."
+  faqs={faqs}
+  relatedIds={['P01', 'P05']}
+>
+  <p class="jump"><a href="#how-to-calculate">Skip to how pot odds work</a></p>
+  <PotOddsCalculator client:load />
+
+  <Fragment slot="content">
+    <section class="stack" aria-labelledby="what-are-pot-odds">
+      <h2 id="what-are-pot-odds">What pot odds mean</h2>
+      <p>
+        Pot odds are the price the pot is offering you. When an opponent bets, you pay a known amount
+        for a chance at a known pot. The bigger the pot compared with your call, the less often you
+        need to win.
+      </p>
+      <p>
+        The result of the calculation is called break-even equity. If you call in the same spot many
+        times and win exactly that often, you neither gain nor lose chips over the long run.
+      </p>
+    </section>
+
+    <section class="stack" aria-labelledby="how-to-calculate">
+      <h2 id="how-to-calculate">How to calculate pot odds</h2>
+      <p>The formula uses three amounts:</p>
+      <ul>
+        <li><strong>P</strong> is the pot before your opponent’s bet.</li>
+        <li><strong>B</strong> is your opponent’s bet.</li>
+        <li><strong>C</strong> is what you have to pay to call.</li>
+      </ul>
+      <p class="formula">Required equity = C ÷ (P + B + C) × 100%</p>
+      <p>Here it is with a pot of 100 and a bet of 50, which you call for 50:</p>
+      <ol>
+        {
+          explainResult(halfPot).steps.map(({ title, working }) => (
+            <li>
+              {title}: <span class="working">{working}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <p>
+        {explainResult(halfPot).summary} The ratio {formatRatio(halfPot.ratio)} is the same price written
+        another way: you can win {formatChips(halfPot.potToWin)} by paying {formatChips(halfPot.call)}.
+      </p>
+    </section>
+
+    <section class="stack" aria-labelledby="examples">
+      <h2 id="examples">Pot odds examples</h2>
+      {
+        walkthroughs.map(({ title, setup, result }) => (
+          <div class="stack">
+            <h3>{title}</h3>
+            <p>{setup}</p>
+            <p class="working">{explainResult(result).equation}</p>
+            <p>
+              The final pot is {formatChips(result.finalPot)} and the pot odds are{' '}
+              {formatRatio(result.ratio)}.
+            </p>
+          </div>
+        ))
+      }
+      <p>Bigger bets ask you to win more often. These prices apply at any stakes:</p>
+      <div class="chart" role="region" aria-label="Required equity by bet size" tabindex="0">
+        <table>
+          <caption>Required equity by bet size</caption>
+          <thead>
+            <tr>
+              <th scope="col">Bet</th>
+              <th scope="col">Pot odds</th>
+              <th scope="col">Required equity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              betSizes.map(({ name, result }) => (
+                <tr>
+                  <th scope="row">{name}</th>
+                  <td>{formatRatio(result.ratio)}</td>
+                  <td>{formatPercent(result.requiredEquity)}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="stack" aria-labelledby="call-differs">
+      <h2 id="call-differs">When your call is smaller than the bet</h2>
+      <p>
+        With one opponent and no chips of yours in this round, your call equals the bet. When it
+        doesn’t, the reason changes what you can win, so the calculator asks for it.
+      </p>
+      <ul>
+        <li>
+          <strong>You already have chips in this round.</strong> They stay in the pot, so you pay only
+          the difference. That is the raise example above.
+        </li>
+        <li>
+          <strong>More than one opponent has bet.</strong> Add their chips together as the bet. If one
+          player bets 50 and another calls, the bet is 100 and your call is 50, so you need {
+            formatPercent(multiway.requiredEquity)
+          }.
+        </li>
+        <li>
+          <strong>You are all-in for less, against one opponent.</strong> You can only win what you
+          match, and the rest goes back to your opponent. With a pot of 100, a bet of 100, no chips of
+          yours in this round and 40 left, the math is <span class="working">{explainResult(allIn).equation}</span>.
+        </li>
+        <li>
+          <strong>Any other all-in for less.</strong> With two or more opponents there is usually a
+          side pot you can’t win, so one result for the whole table would be wrong. Count only the pot
+          you can win and the chips you can match from each opponent, including any you already put in
+          this round.
+        </li>
+      </ul>
+    </section>
+
+    <section class="stack" aria-labelledby="pot-odds-vs-equity">
+      <h2 id="pot-odds-vs-equity">Pot odds vs equity</h2>
+      <p>
+        The two numbers answer different questions. Pot odds ask how often you need to win, and come
+        straight from the chips. Equity asks how often you will win, and depends on your cards and
+        what your opponent is likely to hold.
+      </p>
+      <p>
+        If your equity is higher than the required equity, the call makes money over time on the
+        chips in play. If it’s lower, the call loses money unless you expect to win more on later
+        streets. If they’re equal, the call breaks even.
+      </p>
+      <p>
+        Say you are on the turn with a flush draw, and only the flush can win. You have {outs} outs
+        from {unseenCards} unseen cards, which is about {outsPercent}%. A half-pot bet asks for {
+          formatPercent(halfPot.requiredEquity)
+        }, so the immediate call doesn’t pay for itself.
+      </p>
+      <p>
+        This calculator doesn’t estimate equity. To judge how strong your hand is, start with our
+        <a href="/poker-hand-rankings/">poker hand rankings chart</a>.
+      </p>
+    </section>
+
+    <section class="stack" aria-labelledby="what-it-leaves-out">
+      <h2 id="what-it-leaves-out">What pot odds leave out</h2>
+      <p>The result is the break-even price of this one call. It doesn’t tell you whether to call.</p>
+      <ul>
+        <li><strong>Rake.</strong> The house’s cut shrinks the pot, so you need a little more equity.</li>
+        <li><strong>Future bets.</strong> You may have to pay more on later streets to see the hand through.</li>
+        <li><strong>Implied odds.</strong> You may win more than the current pot if you hit your hand.</li>
+        <li>
+          <strong>Players still to act.</strong> The math assumes the action ends with your call. A
+          raise behind you changes the price, which is one reason your
+          <a href="/poker-positions/">position at the table</a> matters.
+        </li>
+      </ul>
+    </section>
+  </Fragment>
+</ToolLayout>
+
+<style>
+  .jump {
+    margin-bottom: var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  section + section {
+    margin-top: var(--space-6);
+  }
+
+  .formula {
+    padding: var(--space-3);
+    border-left: 4px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-raised);
+    font-weight: 600;
+  }
+
+  .working {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+
+  .chart {
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-raised);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+  }
+
+  caption {
+    padding: var(--space-3);
+    font-weight: 600;
+    text-align: left;
+  }
+
+  th,
+  td {
+    padding: var(--space-2) var(--space-3);
+    border-top: 1px solid var(--color-border);
+    text-align: left;
+  }
+</style>
