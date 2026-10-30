@@ -1,0 +1,173 @@
+{
+  "scope": "planned_pages_not_necessarily_published",
+  "market": "us",
+  "language": "en",
+  "source": "YepAPI snapshot 2026-10-30; directional metrics",
+  "pages": [
+    {
+      "id": "P01",
+      "releaseWave": "Wave 1",
+      "name": "Poker Hand Rankings Explorer",
+      "path": "/poker-hand-rankings/",
+      "primaryKeyword": "poker hands ranked",
+      "volumeUsApprox": 135000,
+      "keywordDifficulty": 16,
+      "effort": "M",
+      "publishInWave1": true
+    },
+    {
+      "id": "P02",
+      "releaseWave": "Wave 4",
+      "name": "Texas Hold'em Odds & Equity Calculator",
+      "path": "/poker-odds-calculator/",
+      "primaryKeyword": "poker odds calculator",
+      "volumeUsApprox": 9900,
+      "keywordDifficulty": 7,
+      "effort": "XL",
+      "publishInWave1": false
+    },
+    {
+      "id": "P03",
+      "releaseWave": "Wave 2",
+      "name": "Learn Poker by Playing",
+      "path": "/how-to-play-poker/",
+      "primaryKeyword": "how to play poker",
+      "volumeUsApprox": 74000,
+      "keywordDifficulty": 31,
+      "effort": "L",
+      "publishInWave1": false
+    },
+    {
+      "id": "P04",
+      "releaseWave": "Wave 2",
+      "name": "Texas Hold'em Rules Simulator",
+      "path": "/texas-holdem-rules/",
+      "primaryKeyword": "texas holdem rules",
+      "volumeUsApprox": 27100,
+      "keywordDifficulty": 21,
+      "effort": "L",
+      "publishInWave1": false
+    },
+    {
+      "id": "P05",
+      "releaseWave": "Wave 1",
+      "name": "Poker Positions Trainer",
+      "path": "/poker-positions/",
+      "primaryKeyword": "poker positions",
+      "volumeUsApprox": 3600,
+      "keywordDifficulty": 5,
+      "effort": "S",
+      "publishInWave1": true
+    },
+    {
+      "id": "P06",
+      "releaseWave": "Wave 3",
+      "name": "Preflop Charts Explorer",
+      "path": "/preflop-charts/",
+      "primaryKeyword": "preflop charts",
+      "volumeUsApprox": 1300,
+      "keywordDifficulty": 0,
+      "effort": "M",
+      "publishInWave1": false
+    },
+    {
+      "id": "P07",
+      "releaseWave": "Wave 3",
+      "name": "Poker Range Builder",
+      "path": "/poker-ranges/",
+      "primaryKeyword": "poker ranges",
+      "volumeUsApprox": 1000,
+      "keywordDifficulty": 18,
+      "effort": "M",
+      "publishInWave1": false
+    },
+    {
+      "id": "P08",
+      "releaseWave": "Wave 3",
+      "name": "3-Bet Trainer",
+      "path": "/poker-3-bet/",
+      "primaryKeyword": "what is a 3 bet in poker",
+      "volumeUsApprox": 1600,
+      "keywordDifficulty": 4,
+      "effort": "M",
+      "publishInWave1": false
+    },
+    {
+      "id": "P09",
+      "releaseWave": "Wave 1",
+      "name": "Pot Odds Calculator",
+      "path": "/poker-pot-odds-calculator/",
+      "primaryKeyword": "how to calculate pot odds",
+      "volumeUsApprox": 260,
+      "keywordDifficulty": 12,
+      "effort": "S",
+      "publishInWave1": true
+    },
+    {
+      "id": "P10",
+      "releaseWave": "Wave 4",
+      "name": "Poker Outs Trainer",
+      "path": "/poker-outs/",
+      "primaryKeyword": "poker outs",
+      "volumeUsApprox": 140,
+      "keywordDifficulty": 0,
+      "effort": "M",
+      "publishInWave1": false
+    },
+    {
+      "id": "P11",
+      "releaseWave": "Wave 2",
+      "name": "Poker Quiz & Practice",
+      "path": "/poker-quiz/",
+      "primaryKeyword": "poker quiz",
+      "volumeUsApprox": 320,
+      "keywordDifficulty": 1,
+      "effort": "M",
+      "publishInWave1": false
+    },
+    {
+      "id": "P12",
+      "releaseWave": "Wave 4",
+      "name": "Poker EV Calculator",
+      "path": "/poker-ev-calculator/",
+      "primaryKeyword": "poker ev calculator",
+      "volumeUsApprox": 90,
+      "keywordDifficulty": 13,
+      "effort": "S",
+      "publishInWave1": false
+    },
+    {
+      "id": "P13",
+      "releaseWave": "Wave 4",
+      "name": "Poker Bankroll Calculator",
+      "path": "/poker-bankroll-calculator/",
+      "primaryKeyword": "poker bankroll calculator",
+      "volumeUsApprox": 70,
+      "keywordDifficulty": 0,
+      "effort": "S",
+      "publishInWave1": false
+    },
+    {
+      "id": "P14",
+      "releaseWave": "Wave 5",
+      "name": "Poker ICM Calculator",
+      "path": "/icm-poker/",
+      "primaryKeyword": "icm poker",
+      "volumeUsApprox": 1000,
+      "keywordDifficulty": 22,
+      "effort": "L",
+      "publishInWave1": false
+    },
+    {
+      "id": "P15",
+      "releaseWave": "Wave 5",
+      "name": "Omaha Odds Calculator",
+      "path": "/omaha-poker-odds-calculator/",
+      "primaryKeyword": "omaha poker odds calculator",
+      "volumeUsApprox": 880,
+      "keywordDifficulty": 0,
+      "effort": "XL",
+      "publishInWave1": false
+    }
+  ]
+}
