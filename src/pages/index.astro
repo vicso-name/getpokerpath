@@ -1,0 +1,174 @@
+---
+import { CardFace } from '../components/poker/CardFace';
+import ToolCard from '../components/tools/ToolCard.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { websiteSchema } from '../lib/seo/structuredData';
+import { SITE_DESCRIPTION, SITE_NAME } from '../lib/site/config';
+import { getLiveTools, getToolsInDevelopment } from '../lib/site/tools';
+
+const liveTools = getLiveTools();
+const toolsInDevelopment = getToolsInDevelopment();
+const hasLiveTools = liveTools.length > 0;
+
+const principles = [
+  {
+    title: 'Try it, don’t just read it',
+    body: 'Each tool opens with a working example, so you can change the inputs and watch the answer change.',
+  },
+  {
+    title: 'See the why',
+    body: 'Results come with the rule or the arithmetic behind them, stated in plain English.',
+  },
+  {
+    title: 'No sign-up, no betting',
+    body: 'Everything runs in your browser. There are no accounts, no real-money games and no promises of profit.',
+  },
+];
+---
+
+<BaseLayout
+  title={`${SITE_NAME}: Learn Poker With Interactive Tools`}
+  bareTitle
+  description={SITE_DESCRIPTION}
+  path="/"
+  jsonLd={Astro.site ? [websiteSchema(Astro.site)] : []}
+>
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__text stack">
+        <h1>Learn poker by working it out yourself</h1>
+        <p>
+          Which hand wins, where you sit, what a call really costs. {SITE_NAME} turns the fundamentals
+          of poker into small tools you can try, with clear explanations of every result.
+        </p>
+        <a class="button button--on-brand" href={hasLiveTools ? '/tools/' : '#tools'}>
+          {hasLiveTools ? 'Browse the tools' : 'See what we’re building'}
+        </a>
+      </div>
+      <div class="hero__cards" aria-hidden="true">
+        <CardFace card="As" decorative />
+        <CardFace card="Kh" decorative />
+        <CardFace card="Td" decorative />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="tools" aria-labelledby="tools-heading">
+    <div class="container">
+      <div class="stack prose">
+        <h2 id="tools-heading">{hasLiveTools ? 'Start with a tool' : 'First tools in development'}</h2>
+        {
+          !hasLiveTools && (
+            <p>
+              These three tools are the first we’re building. Each one will go live here once its
+              rules and math pass testing.
+            </p>
+          )
+        }
+      </div>
+      <ul class="card-grid home-tools">
+        {
+          liveTools.map((tool) => (
+            <li>
+              <ToolCard tool={tool} live />
+            </li>
+          ))
+        }
+        {
+          toolsInDevelopment.map((tool) => (
+            <li>
+              <ToolCard tool={tool} live={false} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section principles" aria-labelledby="principles-heading">
+    <div class="container">
+      <h2 id="principles-heading">How {SITE_NAME} teaches</h2>
+      <ul class="principles__list">
+        {
+          principles.map((principle) => (
+            <li>
+              <h3>{principle.title}</h3>
+              <p>{principle.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    background: var(--color-brand);
+    color: var(--color-on-brand-muted);
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+    padding-block: var(--space-7);
+  }
+
+  .hero h1 {
+    color: var(--color-on-brand);
+  }
+
+  .hero__text {
+    font-size: var(--text-lg);
+    max-width: 38rem;
+  }
+
+  .hero__cards {
+    display: flex;
+    justify-content: center;
+    padding-block: var(--space-2);
+    font-size: clamp(0.8rem, 3.6vw, 1.15rem);
+  }
+
+  .hero__cards > :global(*) {
+    margin-inline: -0.35em;
+  }
+
+  .hero__cards > :global(:nth-child(1)) {
+    transform: rotate(-8deg) translateY(0.4em);
+  }
+
+  .hero__cards > :global(:nth-child(3)) {
+    transform: rotate(8deg) translateY(0.4em);
+  }
+
+  .home-tools {
+    margin-top: var(--space-5);
+  }
+
+  .principles {
+    background: var(--color-surface-sunken);
+  }
+
+  .principles__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-5);
+    margin: var(--space-5) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .principles__list p {
+    margin-top: var(--space-2);
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 48rem) {
+    .hero__inner {
+      grid-template-columns: 3fr 2fr;
+      padding-block: var(--space-8);
+    }
+  }
+</style>

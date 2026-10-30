@@ -1,0 +1,83 @@
+---
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import ToolCard from '../../components/tools/ToolCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { breadcrumbListSchema } from '../../lib/seo/structuredData';
+import { getLiveTools, getToolsInDevelopment } from '../../lib/site/tools';
+
+const liveTools = getLiveTools();
+const toolsInDevelopment = getToolsInDevelopment();
+// A directory with nothing to open is thin content, so it stays noindex until a tool ships.
+const hasLiveTools = liveTools.length > 0;
+
+const crumbs = [
+  { label: 'Home', path: '/' },
+  { label: 'Tools', path: '/tools/' },
+];
+---
+
+<BaseLayout
+  title="Free Poker Tools and Trainers"
+  description="Interactive poker tools for learning hand rankings, table positions and pot odds, free to use with no sign-up."
+  path="/tools/"
+  noindex={!hasLiveTools}
+  jsonLd={Astro.site ? [breadcrumbListSchema(crumbs, Astro.site)] : []}
+>
+  <div class="container section">
+    <Breadcrumbs crumbs={crumbs} />
+    <header class="tools-header stack prose">
+      <h1>Poker tools</h1>
+      <p class="lede">
+        {
+          hasLiveTools
+            ? 'Interactive tools for learning the fundamentals. Free to use, with no sign-up.'
+            : 'No tools are live yet. The first three are in development and will appear here once their rules and math pass testing.'
+        }
+      </p>
+    </header>
+
+    {
+      hasLiveTools && (
+        <section aria-labelledby="live-heading" class="tools-group">
+          <h2 id="live-heading">Available now</h2>
+          <ul class="card-grid">
+            {liveTools.map((tool) => (
+              <li>
+                <ToolCard tool={tool} live />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      toolsInDevelopment.length > 0 && (
+        <section aria-labelledby="development-heading" class="tools-group">
+          <h2 id="development-heading">In development</h2>
+          <ul class="card-grid">
+            {toolsInDevelopment.map((tool) => (
+              <li>
+                <ToolCard tool={tool} live={false} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .tools-header {
+    margin-top: var(--space-4);
+  }
+
+  .tools-group {
+    margin-top: var(--space-7);
+  }
+
+  .tools-group .card-grid {
+    margin-top: var(--space-4);
+  }
+</style>

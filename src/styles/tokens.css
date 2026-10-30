@@ -1,0 +1,60 @@
+/*
+ * Semantic design tokens. The palette is provisional: the logo and final brand
+ * colors are unconfirmed, so components use these names and never raw values.
+ */
+:root {
+  color-scheme: light;
+
+  /* Color */
+  --color-brand: #14523f;
+  --color-brand-strong: #0e3b2d;
+  --color-on-brand: #ffffff;
+  --color-on-brand-muted: #cfe2da;
+  --color-accent: #a06a12;
+  --color-surface: #f6f4ee;
+  --color-surface-raised: #ffffff;
+  --color-surface-sunken: #ebe8df;
+  --color-text: #1b2320;
+  --color-text-muted: #4d5a55;
+  --color-border: #d3cfc3;
+  --color-border-strong: #8b9490;
+  --color-focus: #0b57d0;
+  --color-focus-on-brand: #ffd479;
+  --color-success: #1d6b3c;
+  --color-error: #b3261e;
+  --color-suit-red: #b3261e;
+  --color-suit-black: #1b2320;
+
+  /* Type */
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 1.875rem);
+  --text-3xl: clamp(2rem, 1.6rem + 2.2vw, 3.25rem);
+  --leading-tight: 1.15;
+  --leading-normal: 1.6;
+
+  /* Space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+
+  /* Shape and layout */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-card: 0 1px 2px rgb(27 35 32 / 12%), 0 6px 16px rgb(27 35 32 / 10%);
+  --content-width: 72rem;
+  --prose-width: 42rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --tap-target: 2.75rem;
+}

@@ -1,0 +1,91 @@
+---
+import { SITE_NAME } from '../../lib/site/config';
+import { getLiveTools } from '../../lib/site/tools';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath } = Astro.props;
+const links = [
+  { label: 'Tools', href: '/tools/' },
+  ...getLiveTools().map((tool) => ({ label: tool.navLabel, href: tool.path })),
+];
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="site-header__brand" href="/" aria-current={currentPath === '/' ? 'page' : undefined}>
+      {SITE_NAME}
+    </a>
+    <nav aria-label="Main">
+      <ul class="site-header__links">
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href} aria-current={currentPath === link.href ? 'page' : undefined}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background: var(--color-surface-raised);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-5);
+    padding-block: var(--space-2);
+  }
+
+  .site-header__brand {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-target);
+    color: var(--color-brand-strong);
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .site-header__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-header__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-target);
+    color: var(--color-text);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .site-header__links a:hover {
+    color: var(--color-brand);
+    text-decoration: underline;
+  }
+
+  .site-header__links a[aria-current='page'] {
+    color: var(--color-brand);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+</style>

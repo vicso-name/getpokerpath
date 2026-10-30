@@ -1,0 +1,44 @@
+---
+import { SITE_NAME } from '../../lib/site/config';
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p class="site-footer__brand">{SITE_NAME}</p>
+    <p>
+      Poker education only. We offer no real-money games, betting or payments, and nothing here
+      guarantees results at the table.
+    </p>
+    <nav aria-label="Footer">
+      <a href="/tools/">All tools</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-surface-sunken);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .site-footer__inner {
+    display: grid;
+    gap: var(--space-2);
+    padding-block: var(--space-6);
+  }
+
+  .site-footer__brand {
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 700;
+  }
+
+  .site-footer nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-target);
+  }
+</style>

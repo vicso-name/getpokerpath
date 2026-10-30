@@ -1,0 +1,43 @@
+---
+export interface FaqItem {
+  question: string;
+  /** Plain text; split into paragraphs on blank lines. */
+  answer: string;
+}
+
+interface Props {
+  items: readonly FaqItem[];
+}
+
+const { items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Frequently asked questions</h2>
+      {items.map((item) => (
+        <div class="faq__item">
+          <h3>{item.question}</h3>
+          {item.answer.split(/\n\s*\n/).map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+        </div>
+      ))}
+    </section>
+  )
+}
+
+<style>
+  .faq {
+    max-width: var(--prose-width);
+  }
+
+  .faq__item {
+    margin-top: var(--space-5);
+  }
+
+  .faq__item p {
+    margin-top: var(--space-2);
+  }
+</style>

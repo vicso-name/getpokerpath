@@ -1,0 +1,45 @@
+---
+import type { Crumb } from '../../lib/seo/structuredData';
+
+interface Props {
+  crumbs: readonly Crumb[];
+}
+
+const { crumbs } = Astro.props;
+---
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    {
+      crumbs.map((crumb, index) =>
+        index === crumbs.length - 1 ? (
+          <li aria-current="page">{crumb.label}</li>
+        ) : (
+          <li>
+            <a href={crumb.path}>{crumb.label}</a>
+          </li>
+        ),
+      )
+    }
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li + li::before {
+    content: '/';
+    margin-inline: var(--space-2);
+  }
+</style>

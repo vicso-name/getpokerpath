@@ -1,0 +1,32 @@
+---
+import { getLinkableTools } from '../../lib/site/tools';
+import ToolCard from './ToolCard.astro';
+
+interface Props {
+  /** Tool IDs. Unpublished tools are dropped, so a page never links to a 404. */
+  ids: readonly string[];
+}
+
+const tools = getLinkableTools(Astro.props.ids);
+---
+
+{
+  tools.length > 0 && (
+    <section aria-labelledby="related-tools-heading">
+      <h2 id="related-tools-heading">Related tools</h2>
+      <ul class="card-grid">
+        {tools.map((tool) => (
+          <li>
+            <ToolCard tool={tool} live />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .card-grid {
+    margin-top: var(--space-5);
+  }
+</style>

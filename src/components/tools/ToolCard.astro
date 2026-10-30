@@ -1,0 +1,50 @@
+---
+import type { Tool } from '../../lib/site/tools';
+
+interface Props {
+  tool: Tool;
+  /** Live tools link to their page; in-development tools are plain text. */
+  live: boolean;
+}
+
+const { tool, live } = Astro.props;
+---
+
+<article class:list={['tool-card', { 'tool-card--live': live }]}>
+  <h3>{live ? <a href={tool.path}>{tool.name}</a> : tool.name}</h3>
+  <p>{tool.summary}</p>
+  {!live && <p class="tool-card__status">In development</p>}
+</article>
+
+<style>
+  .tool-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    height: 100%;
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-raised);
+  }
+
+  .tool-card--live:hover {
+    border-color: var(--color-brand);
+  }
+
+  /* Stretch the title link over the card so the whole card is one tap target. */
+  .tool-card a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-lg);
+  }
+
+  .tool-card__status {
+    margin-top: auto;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+</style>

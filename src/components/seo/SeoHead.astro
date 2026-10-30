@@ -1,0 +1,27 @@
+---
+import { buildSeoMeta, type SeoInput } from '../../lib/seo/meta';
+import { serializeJsonLd } from '../../lib/seo/structuredData';
+import { SITE_LOCALE, SITE_NAME } from '../../lib/site/config';
+
+interface Props extends Omit<SeoInput, 'site'> {
+  jsonLd?: readonly unknown[];
+}
+
+const { jsonLd = [], ...input } = Astro.props;
+const meta = buildSeoMeta({ ...input, site: Astro.site });
+---
+
+<title>{meta.title}</title>
+<meta name="description" content={meta.description} />
+{meta.robots && <meta name="robots" content={meta.robots} />}
+{meta.canonical && <link rel="canonical" href={meta.canonical} />}
+
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:locale" content={SITE_LOCALE} />
+<meta property="og:type" content={meta.ogType} />
+<meta property="og:title" content={meta.title} />
+<meta property="og:description" content={meta.description} />
+{meta.canonical && <meta property="og:url" content={meta.canonical} />}
+<meta name="twitter:card" content="summary" />
+
+{jsonLd.map((data) => <script is:inline type="application/ld+json" set:html={serializeJsonLd(data)} />)}

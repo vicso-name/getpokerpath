@@ -1,0 +1,62 @@
+---
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import Faq, { type FaqItem } from '../components/tools/Faq.astro';
+import RelatedTools from '../components/tools/RelatedTools.astro';
+import { breadcrumbListSchema } from '../lib/seo/structuredData';
+import type { Tool } from '../lib/site/tools';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  tool: Tool;
+  /** SEO title and description; distinct from the visible H1 and intro. */
+  title: string;
+  description: string;
+  heading: string;
+  intro: string;
+  faqs?: readonly FaqItem[];
+  relatedIds?: readonly string[];
+}
+
+const { tool, title, description, heading, intro, faqs = [], relatedIds = [] } = Astro.props;
+
+const crumbs = [
+  { label: 'Home', path: '/' },
+  { label: 'Tools', path: '/tools/' },
+  { label: tool.name, path: tool.path },
+];
+const jsonLd = Astro.site ? [breadcrumbListSchema(crumbs, Astro.site)] : [];
+---
+
+<BaseLayout title={title} description={description} path={tool.path} jsonLd={jsonLd}>
+  <div class="container tool-page">
+    <Breadcrumbs crumbs={crumbs} />
+    <header class="tool-page__hero stack">
+      <h1>{heading}</h1>
+      <p class="lede prose">{intro}</p>
+    </header>
+
+    <!-- The interactive tool sits above the prose so phones reach it first. -->
+    <section class="tool-page__tool" aria-label={tool.name}>
+      <slot />
+    </section>
+
+    <div class="tool-page__content stack prose">
+      <slot name="content" />
+    </div>
+
+    <Faq items={faqs} />
+    <RelatedTools ids={relatedIds} />
+  </div>
+</BaseLayout>
+
+<style>
+  .tool-page {
+    display: grid;
+    gap: var(--space-6);
+    padding-block: var(--space-5) var(--space-7);
+  }
+
+  .tool-page > * {
+    min-width: 0;
+  }
+</style>

@@ -1,0 +1,31 @@
+.card {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 4.75em;
+  aspect-ratio: 5 / 7;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-card);
+  font-family: var(--font-display);
+  line-height: 1;
+}
+
+.red {
+  color: var(--color-suit-red);
+}
+
+.black {
+  color: var(--color-suit-black);
+}
+
+.rank {
+  font-size: 2em;
+  font-weight: 700;
+}
+
+.suit {
+  font-size: 1.75em;
+}
