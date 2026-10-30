@@ -1,0 +1,59 @@
+.picker {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.suitName {
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--space-1);
+}
+
+.card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-height: var(--tap-target);
+  padding: 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  color: var(--color-suit-black);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--color-brand);
+  background: var(--color-surface-sunken);
+}
+
+.cardSuit::before {
+  content: attr(data-symbol);
+}
+
+.red {
+  color: var(--color-suit-red);
+}
+
+/* A line through the label keeps "in use" readable without relying on color. */
+.used,
+.used:hover {
+  border-style: dashed;
+  border-color: var(--color-border);
+  background: var(--color-surface-sunken);
+  color: var(--color-text-muted);
+  font-weight: 400;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}

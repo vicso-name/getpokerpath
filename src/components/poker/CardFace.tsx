@@ -1,4 +1,10 @@
-import { SUIT_SYMBOLS, cardName, cardRank, cardSuit, type CardCode } from '../../lib/poker/cards';
+import {
+  SUIT_SYMBOLS,
+  cardName,
+  cardRankLabel,
+  cardSuit,
+  type CardCode,
+} from '../../lib/poker/cards';
 import styles from './CardFace.module.css';
 
 interface CardFaceProps {
@@ -16,8 +22,8 @@ export function CardFace({ card, decorative = false }: CardFaceProps) {
 
   return (
     <span className={`${styles.card} ${isRed ? styles.red : styles.black}`} {...accessibility}>
-      <span className={styles.rank}>{cardRank(card) === 'T' ? '10' : cardRank(card)}</span>
-      <span className={styles.suit}>{SUIT_SYMBOLS[suit]}</span>
+      <span className={styles.rank}>{cardRankLabel(card)}</span>
+      <span className={styles.suit} data-symbol={SUIT_SYMBOLS[suit]} />
     </span>
   );
 }

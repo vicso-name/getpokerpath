@@ -17,7 +17,7 @@ export interface Tool {
  * single step that publishes a tool to the navigation, Home, /tools/ and related
  * links, so only add one in the same change that ships the working page.
  */
-export const LIVE_TOOL_IDS: readonly string[] = [];
+export const LIVE_TOOL_IDS: readonly string[] = ['P01'];
 
 const TOOL_COPY: Record<string, Pick<Tool, 'navLabel' | 'summary'>> = {
   P01: {
@@ -48,6 +48,13 @@ function toTool(page: SeoPage): Tool {
 }
 
 const waveOnePages = seoPages.pages.filter((page) => page.publishInWave1);
+
+/** Looks up a tool for its own page. Links must use the live helpers below instead. */
+export function getTool(id: string): Tool {
+  const page = seoPages.pages.find((candidate) => candidate.id === id);
+  if (!page) throw new Error(`Unknown tool: ${id}`);
+  return toTool(page);
+}
 
 /** Wave 1 tools that are published and safe to link to. */
 export function getLiveTools(): Tool[] {

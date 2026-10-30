@@ -136,6 +136,29 @@ a:hover {
   outline-color: var(--color-focus-on-brand);
 }
 
+.button--secondary {
+  border-color: var(--color-border-strong);
+  background: transparent;
+  color: var(--color-text);
+}
+
+.button--secondary:hover {
+  border-color: var(--color-brand);
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+}
+
+.button:disabled {
+  border-color: var(--color-border);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+button.button {
+  cursor: pointer;
+}
+
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));

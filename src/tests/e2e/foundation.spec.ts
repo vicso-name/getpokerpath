@@ -8,6 +8,7 @@ const ORIGIN = 'https://getpokerpath.com';
 const pages = [
   { path: '/', indexable: true },
   { path: '/tools/', indexable: LIVE_TOOL_IDS.length > 0 },
+  { path: '/poker-hand-rankings/', indexable: true },
 ];
 
 async function internalLinks(page: Page): Promise<string[]> {
@@ -91,7 +92,7 @@ test('every planned tool route stays unpublished until it is live', async ({ req
   }
 });
 
-test('home and tools have distinct titles and descriptions', async ({ page }) => {
+test('every published page has a distinct title and description', async ({ page }) => {
   const meta = [];
   for (const { path } of pages) {
     await page.goto(path);
@@ -100,8 +101,8 @@ test('home and tools have distinct titles and descriptions', async ({ page }) =>
       description: await page.locator('meta[name="description"]').getAttribute('content'),
     });
   }
-  expect(meta[0].title).not.toBe(meta[1].title);
-  expect(meta[0].description).not.toBe(meta[1].description);
+  expect(new Set(meta.map(({ title }) => title)).size).toBe(pages.length);
+  expect(new Set(meta.map(({ description }) => description)).size).toBe(pages.length);
 });
 
 test('unknown URLs get a noindex 404 page with a way back', async ({ page }) => {

@@ -26,6 +26,11 @@
   font-weight: 700;
 }
 
+/* The suit is an icon, not a label: the card's name already says it in words. */
 .suit {
   font-size: 1.75em;
+}
+
+.suit::before {
+  content: attr(data-symbol);
 }

@@ -1,0 +1,67 @@
+---
+import { cardName } from '../../lib/poker/cards';
+import type { Showdown } from '../../lib/poker/showdown';
+import { CardFace } from '../poker/CardFace';
+
+interface Props {
+  title: string;
+  showdown: Showdown;
+}
+
+const { title, showdown } = Astro.props;
+const hands = [
+  { name: 'Player A', hand: showdown.handA },
+  { name: 'Player B', hand: showdown.handB },
+];
+---
+
+<figure class="example">
+  <figcaption>{title}</figcaption>
+  {
+    hands.map(({ name, hand }) => (
+      <div class="example__hand">
+        <p>
+          {name}: {hand.description}
+        </p>
+        <div
+          class="example__cards"
+          role="img"
+          aria-label={`${name}: ${hand.cards.map(cardName).join(', ')}`}
+        >
+          {hand.cards.map((card) => (
+            <CardFace card={card} decorative />
+          ))}
+        </div>
+      </div>
+    ))
+  }
+  <p class="example__result">{showdown.explanation}</p>
+</figure>
+
+<style>
+  .example {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-raised);
+  }
+
+  figcaption {
+    font-weight: 700;
+  }
+
+  .example__cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    margin-top: var(--space-1);
+    font-size: 0.56rem;
+  }
+
+  .example__result {
+    color: var(--color-text-muted);
+  }
+</style>

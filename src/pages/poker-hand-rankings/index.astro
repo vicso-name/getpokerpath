@@ -1,0 +1,149 @@
+---
+import { CardFace } from '../../components/poker/CardFace';
+import type { FaqItem } from '../../components/tools/Faq.astro';
+import { HandComparator } from '../../components/tools/HandComparator';
+import HandRankingChart from '../../components/tools/HandRankingChart.astro';
+import ShowdownExample from '../../components/tools/ShowdownExample.astro';
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import { cardName, type CardCode } from '../../lib/poker/cards';
+import { evaluateBest } from '../../lib/poker/evaluate';
+import { showdownFiveCard, showdownHoldem } from '../../lib/poker/showdown';
+import { getTool } from '../../lib/site/tools';
+
+const tool = getTool('P01');
+const cards = (text: string) => text.split(' ') as CardCode[];
+
+// Worked examples run through the real engine, so the page can't drift from the rules.
+const pairKicker = showdownFiveCard(cards('Kc Kd Ah 9s 4c'), cards('Ks Kh Qd 9d 4d'));
+const twoPairKicker = showdownFiveCard(cards('Jc Jd 6h 6s Ad'), cards('Jh Js 6c 6d Kc'));
+const boardSplit = showdownHoldem(cards('2c 3d'), cards('4h 5h'), cards('As Kd Qh Jc Ts'));
+
+const sevenCards = cards('Ah Qh Jh 9h 4c 4d 2h');
+const bestOfSeven = evaluateBest(sevenCards);
+
+const faqs: readonly FaqItem[] = [
+  {
+    question: 'What are the 10 poker hands in order?',
+    answer:
+      'From strongest to weakest: royal flush, straight flush, four of a kind, full house, flush, straight, three of a kind, two pair, pair and high card.',
+  },
+  {
+    question: 'Is three of a kind better than a full house?',
+    answer:
+      'No. A full house beats three of a kind. A full house already contains three of a kind, with a pair added on top.',
+  },
+  {
+    question: 'Does a flush beat a straight?',
+    answer:
+      'Yes. A flush beats a straight because it is harder to make: there are 5,108 possible flushes and 10,200 possible straights among all five-card hands.',
+  },
+  {
+    question: 'Can an ace be low in poker?',
+    answer:
+      'Yes, but only in the straight A-2-3-4-5, which counts as a five-high straight and loses to 2-3-4-5-6. An ace can also be high in 10-J-Q-K-A. A straight can’t wrap around the ace, so Q-K-A-2-3 is not a straight.',
+  },
+  {
+    question: 'Do suits matter when two hands tie?',
+    answer:
+      'No. In standard poker no suit outranks another. Two flushes are compared by rank only, and if the ranks match, the pot is split.',
+  },
+  {
+    question: 'Do I have to use both hole cards in Texas Hold’em?',
+    answer:
+      'No. Your hand is the best five of seven cards, so you can use both hole cards, one of them or neither. Using neither is called playing the board.',
+  },
+];
+---
+
+<ToolLayout
+  tool={tool}
+  title="Poker Hands Ranked: Chart & Hand Comparator"
+  description="See all 10 poker hands ranked from royal flush to high card, then compare two hands to find out who wins and why, including kickers and ties."
+  heading="Poker Hands Ranked From Best to Worst"
+  intro="From strongest to weakest: royal flush, straight flush, four of a kind, full house, flush, straight, three of a kind, two pair, pair and high card. Pick any cards below to see which hand wins and why."
+  faqs={faqs}
+  relatedIds={['P05', 'P09']}
+>
+  <p class="jump"><a href="#hand-chart">Skip to the hand rankings chart</a></p>
+  <HandComparator client:load />
+
+  <Fragment slot="content">
+    <section class="stack" aria-labelledby="hand-chart">
+      <h2 id="hand-chart">Poker hand rankings chart</h2>
+      <p>
+        Hands are listed from strongest to weakest. A hand beats everything below it, whatever the
+        individual cards are, so the lowest flush still beats the highest straight. The counts show
+        how many of the possible five-card hands fall into each category, which is why the rarer
+        hand always ranks higher.
+      </p>
+      <HandRankingChart />
+    </section>
+
+    <section class="stack" aria-labelledby="kickers">
+      <h2 id="kickers">How kickers and ties work</h2>
+      <p>
+        When two players hold the same type of hand, compare the cards that define it first: the
+        pair, the three of a kind, the top card of a straight. If those match, compare the kickers,
+        which are the remaining cards in the five-card hand, from highest to lowest.
+      </p>
+      <ShowdownExample title="A kicker settles a pair" showdown={pairKicker} />
+      <p>
+        Two pair works the same way, in a fixed order: the top pair, then the second pair, then the
+        single kicker.
+      </p>
+      <ShowdownExample title="A kicker settles two pair" showdown={twoPairKicker} />
+      <p>
+        Only five cards ever count. If every rank in both five-card hands matches, the hands tie and
+        the pot is split. Suits don’t break the tie.
+      </p>
+      <ShowdownExample title="Both players play the board" showdown={boardSplit} />
+    </section>
+
+    <section class="stack" aria-labelledby="best-five">
+      <h2 id="best-five">Finding your best five of seven in Texas Hold’em</h2>
+      <p>
+        In Texas Hold’em you make the best five-card hand from your two hole cards and the five
+        community cards. You don’t declare a hand: whichever five cards rank highest are your hand,
+        and the other two don’t count.
+      </p>
+      <figure class="seven">
+        <div
+          class="seven__cards"
+          role="img"
+          aria-label={`Seven cards: ${sevenCards.map(cardName).join(', ')}`}
+        >
+          {sevenCards.map((card) => <CardFace card={card} decorative />)}
+        </div>
+        <figcaption>
+          These seven cards contain a pair of Fours, but the best five make a{' '}
+          <strong>{bestOfSeven.description}</strong>: {bestOfSeven.cards.map(cardName).join(', ')}.
+        </figcaption>
+      </figure>
+      <p>Looking for more ways to practice? See all our <a href="/tools/">poker tools</a>.</p>
+    </section>
+  </Fragment>
+</ToolLayout>
+
+<style>
+  .jump {
+    margin-bottom: var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  section + section {
+    margin-top: var(--space-6);
+  }
+
+  .seven {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  .seven__cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    font-size: 0.56rem;
+  }
+</style>

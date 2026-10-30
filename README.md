@@ -43,6 +43,7 @@ src/
   lib/poker/        Poker rules and math. Pure TypeScript with no UI dependencies.
   lib/seo/          Metadata and structured-data builders
   lib/site/         Site constants and the tool registry
+  lib/tools/        UI-free state for individual tools
   styles/           Design tokens and global CSS
   tests/            unit/ (Vitest) and e2e/ (Playwright)
 data/seo-pages.json The approved 15-page URL map
